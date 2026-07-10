@@ -4,8 +4,14 @@ let enviados = 0;
 let enProceso = false;
 let plantillaActual = null;
 
-// Plantillas pre-configuradas
+// Plantillas pre-configuradas PERSONALIZADAS PARA ARTEMINISE
 const plantillas = [
+    {
+        id: 'recordatorio_arteminise',
+        nombre: '🛋️ Recordatorio Arteminise',
+        descripcion: 'Recordatorio profesional de Arteminise',
+        mensaje: 'Buenos días, {nombre}.\n\nLe recordamos que tiene registrado el vencimiento de la cuota correspondiente a un mueble.\n\nAnte cualquier consulta o para coordinar el pago, quedamos a su disposición.\n\nMuchas gracias,\n🏢 Empresa Arteminise'
+    },
     {
         id: 'recordatorio_simple',
         nombre: '📢 Recordatorio Simple',
@@ -41,7 +47,11 @@ const plantillas = [
 // Inicializar cuando carga la página
 window.addEventListener('load', function() {
     inicializarPlantillas();
-    mostrarResultado('👋 Bienvenido a WhatsApp Cobros. Comienza cargando tu archivo CSV', 'info');
+    mostrarResultado('👋 Bienvenido a WhatsApp Cobros Arteminise. Comienza cargando tu archivo CSV', 'info');
+    // Seleccionar plantilla Arteminise por defecto
+    setTimeout(() => {
+        document.querySelector('.plantilla-card').click();
+    }, 500);
 });
 
 // Inicializar plantillas
@@ -49,7 +59,7 @@ function inicializarPlantillas() {
     const container = document.getElementById('plantillas-container');
     container.innerHTML = '';
     
-    plantillas.forEach(plantilla => {
+    plantillas.forEach((plantilla, index) => {
         const card = document.createElement('div');
         card.className = 'plantilla-card';
         card.onclick = () => seleccionarPlantilla(plantilla, card);
@@ -260,10 +270,10 @@ document.getElementById('mensaje').addEventListener('input', actualizarContadorM
 
 function actualizarContadorMensaje() {
     const cantidad = document.getElementById('mensaje').value.length;
-    document.getElementById('contadorMensaje').textContent = cantidad + '/1000 caracteres';
+    document.getElementById('contadorMensaje').textContent = cantidad + '/4500 caracteres';
     
-    if (cantidad > 1000) {
-        document.getElementById('mensaje').value = document.getElementById('mensaje').value.substring(0, 1000);
+    if (cantidad > 4500) {
+        document.getElementById('mensaje').value = document.getElementById('mensaje').value.substring(0, 4500);
     }
 }
 
@@ -280,28 +290,28 @@ function limpiarClientes() {
 // Descargar ejemplo CSV
 function descargarEjemploCSV() {
     const contenido = `numero,nombre,monto_deuda,fecha_vencimiento,tipo_deuda,dias_atraso
-+573001234567,Juan Pérez,150000,2026-06-30,Factura,10
-+573009876543,María García,250000,2026-06-15,Préstamo,25
-+573015678901,Carlos López,100000,2026-07-05,Servicios,5
-+573024567890,Ana Martínez,500000,2026-05-30,Factura,40
-+573033456789,Pedro Rodríguez,75000,2026-07-08,Otro,2`;
++573001234567,Carlos Daniel,1500000,2026-06-30,Mueble,10
++573009876543,María García,2500000,2026-06-15,Mueble,25
++573015678901,Juan López,1000000,2026-07-05,Mueble,5
++573024567890,Ana Martínez,5000000,2026-05-30,Mueble,40
++573033456789,Pedro Rodríguez,750000,2026-07-08,Mueble,2`;
     
-    descargarArchivo(contenido, 'ejemplo_deudores.csv', 'text/csv');
-    mostrarResultado('📥 Descargado: ejemplo_deudores.csv', 'success');
+    descargarArchivo(contenido, 'ejemplo_clientes_arteminise.csv', 'text/csv');
+    mostrarResultado('📥 Descargado: ejemplo_clientes_arteminise.csv', 'success');
 }
 
 // Descargar plantilla Excel
 function descargarPlantillaExcel() {
     const contenido = `numero,nombre,monto_deuda,fecha_vencimiento,tipo_deuda,dias_atraso
-+57,Nombre Cliente,0,AAAA-MM-DD,Tipo,0
-+573001234567,Juan Pérez,150000,2026-06-30,Factura,10
-+573009876543,María García,250000,2026-06-15,Préstamo,25
-+573015678901,Carlos López,100000,2026-07-05,Servicios,5
-+573024567890,Ana Martínez,500000,2026-05-30,Factura,40
-+573033456789,Pedro Rodríguez,75000,2026-07-08,Otro,2`;
++57,Nombre Cliente,0,AAAA-MM-DD,Mueble,0
++573001234567,Carlos Daniel,1500000,2026-06-30,Mueble,10
++573009876543,María García,2500000,2026-06-15,Mueble,25
++573015678901,Juan López,1000000,2026-07-05,Mueble,5
++573024567890,Ana Martínez,5000000,2026-05-30,Mueble,40
++573033456789,Pedro Rodríguez,750000,2026-07-08,Mueble,2`;
     
-    descargarArchivo(contenido, 'plantilla_deudores.csv', 'text/csv');
-    mostrarResultado('📊 Descargada: plantilla_deudores.csv', 'success');
+    descargarArchivo(contenido, 'plantilla_arteminise.csv', 'text/csv');
+    mostrarResultado('📊 Descargada: plantilla_arteminise.csv', 'success');
 }
 
 // Función auxiliar para descargar
@@ -337,7 +347,7 @@ function iniciarEnvio() {
         return;
     }
     
-    if (confirm(`¿Enviar mensaje a ${clientesConDeuda.length} clientes con deuda?\n\nNOTA: Se abrirán ventanas de WhatsApp. Debes confirmar cada envío manualmente.`)) {
+    if (confirm(`¿Enviar mensaje a ${clientesConDeuda.length} clientes?\n\nNOTA: Se abrirán ventanas de WhatsApp. Debes confirmar cada envío manualmente.`)) {
         cambiarTab('envio');
         setTimeout(() => {
             enviarMasivos(clientesConDeuda, mensaje);
@@ -403,7 +413,7 @@ function enviarMasivos(clientesConDeuda, mensaje) {
         // Registrar envío
         registroEnvios.push({
             nombre: cliente.nombre,
-            monto: cliente.monto_deuda,
+            numero: cliente.numero,
             hora: new Date().toLocaleTimeString('es-CO')
         });
         
@@ -435,7 +445,7 @@ function mostrarRegistroEnvios(registroEnvios) {
         tr.innerHTML = `
             <td>${idx + 1}</td>
             <td>${registro.nombre}</td>
-            <td>$${registro.monto.toLocaleString('es-CO')}</td>
+            <td>${registro.numero}</td>
             <td>${registro.hora}</td>
             <td style="color: #28a745; font-weight: bold;">✅ Enviado</td>
         `;
