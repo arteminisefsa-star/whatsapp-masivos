@@ -1,0 +1,26 @@
+{
+  "name": "whatsapp-masivos",
+  "version": "1.0.0",
+  "description": "Aplicación web para enviar notificaciones masivas de deudas por WhatsApp",
+  "main": "index.html",
+  "scripts": {
+    "start": "open index.html",
+    "dev": "python -m http.server 8000"
+  },
+  "keywords": [
+    "whatsapp",
+    "cobros",
+    "deudas",
+    "notificaciones",
+    "masivas",
+    "csv",
+    "javascript"
+  ],
+  "author": "arteminisefsa-star",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arteminisefsa-star/whatsapp-masivos.git"
+  },
+  "homepage": "https://arteminisefsa-star.github.io/whatsapp-masivos"
+}
