@@ -1,0 +1,11 @@
+numero,nombre,monto_deuda,fecha_vencimiento,tipo_deuda,dias_atraso
++573001234567,Juan Pérez,150000,2026-06-30,Factura,10
++573009876543,María García,250000,2026-06-15,Préstamo,25
++573015678901,Carlos López,100000,2026-07-05,Servicios,5
++573024567890,Ana Martínez,500000,2026-05-30,Factura,40
++573033456789,Pedro Rodríguez,75000,2026-07-08,Otro,2
++573042345678,Laura Gómez,320000,2026-06-20,Factura,15
++573051234567,Miguel Sánchez,180000,2026-07-01,Préstamo,9
++573060123456,Sofía López,220000,2026-06-10,Servicios,30
++573079012345,Diego Martín,95000,2026-07-03,Factura,7
++573088901234,Valentina Torres,410000,2026-05-25,Préstamo,45
