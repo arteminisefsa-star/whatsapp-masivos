@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 WhatsApp Masivos - Notificaciones</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #25d366;
+        }
+        
+        .section h2 {
+            color: #25d366;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        input[type="file"],
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="file"]:focus,
+        textarea:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #25d366;
+            box-shadow: 0 0 5px rgba(37, 211, 102, 0.3);
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .file-info {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #25d366;
+            color: white;
+            grid-column: 1 / -1;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: #1fad56;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #e8e8e8;
+            color: #333;
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background: #d0d0d0;
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #1565c0;
+        }
+        
+        .tabla-clientes {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .tabla-clientes thead {
+            background: #25d366;
+            color: white;
+        }
+        
+        .tabla-clientes th,
+        .tabla-clientes td {
+            padding: 12px;
+            text-align: left;
+            font-size: 13px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tabla-clientes tbody tr:hover {
+            background: #f0f0f0;
+        }
+        
+        .tabla-clientes tbody tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .estadisticas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #25d366;
+            text-align: center;
+        }
+        
+        .stat-card .numero {
+            font-size: 28px;
+            font-weight: bold;
+            color: #25d366;
+        }
+        
+        .stat-card .label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-size: 14px;
+        }
+        
+        .resultado.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+        
+        .resultado.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .resultado.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+        
+        .resultado.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffeeba;
+        }
+        
+        .progreso {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .progreso-barra {
+            height: 100%;
+            background: linear-gradient(90deg, #25d366, #128c7e);
+            width: 0%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            transition: width 0.3s;
+        }
+        
+        .instrucciones {
+            background: #fff9e6;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+        
+        .instrucciones h3 {
+            color: #ff6f00;
+            margin-bottom: 10px;
+        }
+        
+        .instrucciones ol {
+            margin-left: 20px;
+            color: #333;
+        }
+        
+        .instrucciones li {
+            margin-bottom: 8px;
+        }
+        
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 WhatsApp Masivos</h1>
+            <p>Envía notificaciones a tus 5000 clientes fácilmente</p>
+        </div>
+        
+        <div class="content">
+            
+            <!-- SECCIÓN 1: CARGAR CLIENTES -->
+            <div class="section">
+                <h2>📥 Paso 1: Carga tu lista de clientes</h2>
+                
+                <div class="instrucciones">
+                    <h3>¿Cómo preparar tu archivo CSV?</h3>
+                    <ol>
+                        <li>Abre <strong>Excel o Google Sheets</strong></li>
+                        <li>Crea 2 columnas: <strong>numero</strong> y <strong>nombre</strong></li>
+                        <li>Ejemplo:
+                            <pre>numero,nombre
++573001234567,Juan Pérez
++573009876543,María García</pre>
+                        </li>
+                        <li>Guarda como <strong>CSV</strong> (separado por comas)</li>
+                    </ol>
+                </div>
+                
+                <div class="form-group">
+                    <label for="archivo">📂 Selecciona tu archivo CSV:</label>
+                    <input type="file" id="archivo" accept=".csv">
+                    <div class="file-info">Máximo 5000 contactos. Formato: numero, nombre</div>
+                </div>
+                
+                <button class="btn-secondary" onclick="descargarEjemploCSV()">📥 Descargar ejemplo CSV</button>
+            </div>
+            
+            <!-- SECCIÓN 2: VISTA PREVIA -->
+            <div class="section" id="seccionPrevia" style="display: none;">
+                <h2>👁️ Paso 2: Revisa los clientes cargados</h2>
+                
+                <div class="estadisticas">
+                    <div class="stat-card">
+                        <div class="numero" id="totalClientes">0</div>
+                        <div class="label">Clientes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="numero" id="clientesValidos">0</div>
+                        <div class="label">Válidos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="numero" id="clientesInvalidos">0</div>
+                        <div class="label">Con errores</div>
+                    </div>
+                </div>
+                
+                <table class="tabla-clientes">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Número</th>
+                            <th>Nombre</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaClientes"></tbody>
+                </table>
+                
+                <div style="margin-top: 15px;">
+                    <button class="btn-secondary" onclick="limpiarClientes()">🗑️ Limpiar lista</button>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN 3: MENSAJE -->
+            <div class="section" id="seccionMensaje" style="display: none;">
+                <h2>✉️ Paso 3: Escribe tu mensaje</h2>
+                
+                <div class="info-box">
+                    💡 Tip: Usa {nombre} para personalizar el mensaje. Ejemplo: "Hola {nombre}, tu pedido está listo"
+                </div>
+                
+                <div class="form-group">
+                    <label for="mensaje">Mensaje a enviar:</label>
+                    <textarea id="mensaje" placeholder="Escribe aquí tu mensaje..." maxlength="1000"></textarea>
+                    <div class="file-info" id="contadorMensaje">0/1000 caracteres</div>
+                </div>
+            </div>
+            
+            <!-- SECCIÓN 4: ENVÍO -->
+            <div class="section" id="seccionEnvio" style="display: none;">
+                <h2>🚀 Paso 4: Envía los mensajes</h2>
+                
+                <div class="info-box">
+                    ⚠️ Se abrirán nuevas ventanas de WhatsApp. Deberás confirmar cada envío manualmente.
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn-primary" onclick="iniciarEnvio()">🚀 Comenzar envío</button>
+                </div>
+                
+                <div class="progreso" id="progreso">
+                    <div class="progreso-barra" id="progresoBarra">0%</div>
+                </div>
+                
+                <div id="resultado" class="resultado"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
